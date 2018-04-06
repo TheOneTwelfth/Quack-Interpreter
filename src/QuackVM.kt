@@ -80,7 +80,7 @@ class QuackVM(inputFile: File, outputFile: File) {
                     }
                     ':' -> {
                         //Mark commands while compiling to avoid runtime errors
-                        labelMap.put(currentCommand.substring(1), currentLine)
+                        labelMap[currentCommand.substring(1)] = currentLine
                         commandList.add(CommandAdapter(Command.MARK, arrayOf(currentLine.toString(), currentCommand.substring(1))))
                     }
                     'J' -> commandList.add(CommandAdapter(Command.JUMP, arrayOf(currentCommand.substring(1))))
@@ -178,8 +178,8 @@ class QuackVM(inputFile: File, outputFile: File) {
         },
         MOD {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                val a = vm.queue.remove()!!
-                val b = vm.queue.remove()!!
+                val a = vm.queue.remove()
+                val b = vm.queue.remove()
                 if (a != null && b != null) {
                     val result = try {
                         a % b
@@ -238,7 +238,7 @@ class QuackVM(inputFile: File, outputFile: File) {
             override fun execute(vm: QuackVM, args: Array<String>) {
                 val line = Integer.parseInt(args[0])
                 val label = args[1]
-                vm.labelMap.put(label, line)
+                vm.labelMap[label] = line
             }
         },
         JUMP {
