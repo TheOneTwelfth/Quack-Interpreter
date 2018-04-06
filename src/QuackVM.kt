@@ -128,7 +128,7 @@ class QuackVM(inputFile: File, outputFile: File) {
 
     /*
      *
-     * Enum holding all command types.
+     * Enum class holding all command types.
      * Inside the enum the "execute" abstract method is declared, taking the VM link and a string array of raw args as input.
      * All enum members (command types) are represented by anonymous classes implementing the "execute" method
      * accordingly to their purpose.
@@ -140,77 +140,54 @@ class QuackVM(inputFile: File, outputFile: File) {
 
         PLUS {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val a = vm.queue.remove()!!
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val b = vm.queue.remove()!!
-                vm.queue.add((a + b % vm.QUEUE_MODULO))
+                val a = vm.queue.remove()
+                val b = vm.queue.remove()
+                if (a != null && b != null)
+                    vm.queue.add((a + b % vm.QUEUE_MODULO))
             }
         },
         MINUS {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val a = vm.queue.remove()!!
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val b = vm.queue.remove()!!
-                vm.queue.add((a - b % vm.QUEUE_MODULO))
+                val a = vm.queue.remove()
+                val b = vm.queue.remove()
+                if (a != null && b != null)
+                    vm.queue.add((a - b % vm.QUEUE_MODULO))
             }
         },
         MULT {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val a = vm.queue.remove()!!
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val b = vm.queue.remove()!!
-                vm.queue.add((a * b % vm.QUEUE_MODULO))
+                val a = vm.queue.remove()
+                val b = vm.queue.remove()
+                if (a != null && b != null)
+                    vm.queue.add((a * b % vm.QUEUE_MODULO))
             }
         },
         DIV {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                if (vm.queue.isEmpty()) {
-                    return
+                val a = vm.queue.remove()
+                val b = vm.queue.remove()
+                if (a != null && b != null) {
+                    val result = try {
+                        a / b
+                    } catch (e: ArithmeticException) {
+                        0
+                    }
+                    vm.queue.add(result)
                 }
-                val a = vm.queue.remove()!!
-                if (vm.queue.isEmpty()) {
-                    return
-                }
-                val b = vm.queue.remove()!!
-                val result = try {
-                    a / b
-                } catch (e: ArithmeticException) {
-                    0
-                }
-                vm.queue.add(result)
             }
         },
         MOD {
             override fun execute(vm: QuackVM, args: Array<String>) {
-                if (vm.queue.isEmpty()) {
-                    return
-                }
                 val a = vm.queue.remove()!!
-                if (vm.queue.isEmpty()) {
-                    return
-                }
                 val b = vm.queue.remove()!!
-                val result = try {
-                    a % b
-                } catch (e: ArithmeticException) {
-                    0
+                if (a != null && b != null) {
+                    val result = try {
+                        a % b
+                    } catch (e: ArithmeticException) {
+                        0
+                    }
+                    vm.queue.add(result)
                 }
-                vm.queue.add(result)
             }
         },
         REG_PUT {
