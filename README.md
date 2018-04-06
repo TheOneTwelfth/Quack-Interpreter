@@ -1,6 +1,6 @@
 # Quack-Interpreter
 
-An interpreter for Quack programming language writter in Kotlin.
+An interpreter for Quack programming language written in Kotlin.
 
 Quack is a programming language presented at the 2004 Internet Problem Solving Contest (https://ipsc.ksp.sk/2004/real/problems/g.html).
 
